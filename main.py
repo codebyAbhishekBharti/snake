@@ -29,8 +29,13 @@ class snake():
                 self.body[c].positiony = self.body[c-1].positiony
             
     def draw_snake(self):
+        first = True
         for c in self.body:
-            pygame.draw.rect(window,(255,255,255),(c.positionx+1,c.positiony+1,23,23))
+            if first:
+                pygame.draw.rect(window,(255,100,50),(c.positionx+1,c.positiony+1,23,23))
+                first = False
+            else:
+                pygame.draw.rect(window,(255,255,255),(c.positionx+1,c.positiony+1,23,23))
             
 
 class cube():
@@ -43,18 +48,15 @@ class cube():
 def random_snack(snake):
     global snack,x,y
     snack = True
-    rand_x = [i*25 for i in range(20)]
-    rand_y = [i*25 for i in range(20)]
+    all_blocks =[]
+    for a in range(20):
+        for b in range(20):
+            all_blocks.append((a*25,b*25))
     for i in snake.body:
-        if i.positionx in rand_x:
-            rand_x.remove(i.positionx)
-        if i.positiony in rand_y:
-            rand_y.remove(i.positiony)
-    x = random.choice(rand_x)
-    y = random.choice(rand_y)
+        if (i.positionx,i.positiony) in all_blocks:
+            all_blocks.remove((i.positionx,i.positiony))
+    x,y = random.choice(all_blocks)
     
-
-
 
 
 # create screen and grid
@@ -99,9 +101,11 @@ def check_if_snake_ate(snake,x,y):
         snack = False
 
 def check_if_snake_hit(snake):
-    for i in range(len(snake.body)-1):
-        if snake.body[0].positionx == snake.body[i+1].positionx and snake.body[0].positiony == snake.body[i+1].positiony:
+    global game
+    for i in range(len(snake.body)-4):
+        if snake.body[0].positionx == snake.body[i+4].positionx and snake.body[0].positiony == snake.body[i+4].positiony:
             game = False
+            break
 
 
 
@@ -156,5 +160,5 @@ while True:
         textRect = text.get_rect()  
         textRect.center = (width // 2, width // 2)
         window.blit(text,textRect)
-    pygame.time.wait(30)
+    pygame.time.wait(50)
     pygame.display.update()
