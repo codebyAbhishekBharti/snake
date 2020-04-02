@@ -97,14 +97,21 @@ def check_if_snake_ate(snake,x,y):
             b = snake.body[0].positiony+25
         snake.body.insert(1,cube(a,b))
         snack = False
+
+def check_if_snake_hit(snake):
+    for i in range(len(snake.body)-1):
+        if snake.body[0].positionx == snake.body[i+1].positionx and snake.body[0].positiony == snake.body[i+1].positiony:
+            game = False
+
+
+
 # font for game over
-font =  pygame.font.Font('freesansbold.ttf', 30)
+font =  pygame.font.Font('freesansbold.ttf', 24)
 white = (255, 255, 255) 
 green = (0, 255, 0) 
 blue = (0, 0, 128) 
-text = font.render('Game Over', True, green) 
-textRect = text.get_rect()  
-textRect.center = (width // 2, width // 2)
+
+
 
 
 # game loop
@@ -117,36 +124,37 @@ while True:
 
     keys = pygame.key.get_pressed()
     for key in keys:
-        if keys[pygame.K_LEFT]:
-            if dx == 25:
-                game = False
-            dx = -25
-            dy = 0
-        elif keys[pygame.K_RIGHT]:
-            if dx == -25:
-                game = False
-            dx = 25
-            dy = 0
-        elif keys[pygame.K_UP]:
-            if dy == 25:
-                game = False
-            dx = 0
-            dy = -25
-        elif keys[pygame.K_DOWN]:
-            if dy == -25:
-                game = False
-            dx = 0
-            dy = 25
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+            if dx != 25:
+                dx = -25
+                dy = 0
+        elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+            if dx != -25:
+                dx = 25
+                dy = 0
+        elif keys[pygame.K_UP] or keys[pygame.K_w]:
+            if dy != 25:
+                dx = 0
+                dy = -25
+        elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
+            if dy != -25:
+                dx = 0
+                dy = 25
 
     if game:
         grid()
         hiss.draw_snake()
+        check_if_snake_hit(hiss)
         hiss.move(dx,dy)
         if snack == False:
             random_snack(hiss)
         pygame.draw.rect(window,(255,0,255),(x,y,25,25))
         check_if_snake_ate(hiss,x,y)
+        
     else:
+        text = font.render('Game Over your Snake length is {}'.format(len(hiss.body)), True, green)
+        textRect = text.get_rect()  
+        textRect.center = (width // 2, width // 2)
         window.blit(text,textRect)
     pygame.time.wait(30)
     pygame.display.update()
