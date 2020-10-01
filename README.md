@@ -1,5 +1,16 @@
-# snake
-classic snake game
+# Snake Game
+Its a classic looking snake game simple game made in python
 
-use arrow buttons to move the snake around.
-make it as long as possible
+## Installation
+```bash
+pip install pygame
+```
+
+## Game controls
+
+```
+For up - Press up arrow
+For down - Press down arrow
+For Right - Press right arrow
+For Left - Press left arrow 
+```
